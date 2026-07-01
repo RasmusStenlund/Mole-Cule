@@ -25,25 +25,17 @@ export function page() {
                     <p>Total mass (u)</p>
                     <p>Mass %</p>
                 </div>
-
-                <div class = "element_card">
-                    <p class = "value">X</p> <p class = "mobile"></p>
-                    <p class = "mobile">Count:</p> <p class = "value">0</p>
-                    <p class = "mobile">Unit mass (u):</p> <p class = "value">000.000</p>
-                    <p class = "mobile">Total mass (u):</p> <p class = "value">000.000</p>
-                    <p class = "mobile">Mass %:</p> <p class = "value">00.00</p>
-                </div>
-
-                <div class = "element_card">
-                    <p class = "value">Y</p> <p class = "mobile"></p>
-                    <p class = "mobile">Count:</p> <p class = "value">0</p>
-                    <p class = "mobile">Unit mass (u):</p> <p class = "value">000.000</p>
-                    <p class = "mobile">Total mass (u):</p> <p class = "value">000.000</p>
-                    <p class = "mobile">Mass %:</p> <p class = "value">00.00</p>
-                </div>
+                <div id = "analyze-card-container"></div>
             </div>
         </div>
     `
+}
+
+function mobile_header(text, card) {
+    const p = document.createElement("p");
+    p.classList.add("mobile");
+    p.textContent = text;
+    card.appendChild(p);
 }
 
 import {call_api} from "../extra-functions.js"
@@ -55,7 +47,8 @@ export function setup() {
 
     const output = document.getElementById("analyze-data");
     const formula_output = document.getElementById("analyze-data-formula");
-    const mol_mass = document.getElementById("analyze-molar-mass")
+    const mol_mass = document.getElementById("analyze-molar-mass");
+    const card_container = document.getElementById("analyze-card-container");
 
 
 
@@ -67,8 +60,47 @@ export function setup() {
             var dict = {};
             dict["formula"] = formula;
             const response = await call_api(dict, "/analyze");
+            const molar_mass = response["molar_mass"];
+            mol_mass.textContent = `Molar mass: ${response["molar_mass"]} g/mol`
 
-            mol_mass.textContent = response["molar_mass"];
+            const elements_data = response["elements_data"];
+            card_container.innerHTML = "";
+            for (let element in elements_data) {
+                const card = document.createElement("div");
+                card.classList.add("element-card");
+
+                const element_value = document.createElement("p");
+                element_value.classList.add("value");
+                element_value.textContent = element;
+                card.appendChild(element_value)
+                mobile_header("", card);
+
+                mobile_header("Count:", card);
+                const count = document.createElement("p");
+                count.classList.add("value");
+                count.textContent = elements_data[element]["count"];
+                card.appendChild(count);
+
+                mobile_header("Unit mass (u):", card);
+                const unit_mass = document.createElement("p");
+                unit_mass.classList.add("value");
+                unit_mass.textContent = elements_data[element]["atomic_mass"];
+                card.appendChild(unit_mass);
+
+                mobile_header("Total mass (u):", card);
+                const total_mass = document.createElement("p");
+                total_mass.classList.add("value");
+                total_mass.textContent = elements_data[element]["mass_contribution"];
+                card.appendChild(total_mass); 
+
+                mobile_header("Mass %:", card);
+                const mass_percent = document.createElement("p");
+                mass_percent.classList.add("value");
+                mass_percent.textContent = elements_data[element]["mass_percent"];
+                card.appendChild(mass_percent);
+
+                card_container.appendChild(card);
+            }
 
             output.classList.remove("hidden")
 

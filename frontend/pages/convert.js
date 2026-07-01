@@ -46,6 +46,8 @@ export function page() {
     `
 }
 
+import {call_api} from "../extra-functions.js";
+
 export function setup() {
     const formula_input = document.getElementById("convert-formula");
     const unit_input = document.getElementById("convert-unit-count")
@@ -60,25 +62,33 @@ export function setup() {
     const output_mass = document.getElementById("convert-data-mass");
     const output_mol = document.getElementById("convert-data-mol");
 
-    submit_button.addEventListener("click", function () {
+    submit_button.addEventListener("click", async function () {
         var formula = formula_input.value;
         var unit_count = unit_input.value;
 
         formula = formula.trim();
-
         if (formula && unit_count) {
-            if (isFinite(unit_count)) {
-                output_formula.textContent = formula;
-                if (radio_mass.checked) {
-                    output_mass.textContent = unit_count;
-                    output_mol.textContent = "Calculating"
-                }
-                else {
-                    output_mol.textContent = unit_count;
-                    output_mass.textContent = "Calculating"
-                }
-                output.classList.remove("hidden");
-            }
+            var dict = {}
+            dict["formula"] = formula;
+            if (radio_mass.checked) {
+                dict["mass"] = unit_count;
+            } else {
+                dict["mol"] = unit_count;
+            };  
+
+            const response = await call_api(dict, "/convert");
+
+            output_formula.textContent = response["entered_formula"];
+            if (radio_mass.checked) {
+                output_mass.textContent = response["entered_mass"]
+                output_mol.textContent = response["data"]["mol"]
+            } else {
+                output_mol.textContent = response["entered_mol"]
+                output_mass.textContent = response["data"]["mass"]
+            };
+            
+
+            output.classList.remove("hidden");
         }
     })
 
