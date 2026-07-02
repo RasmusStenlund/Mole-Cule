@@ -17,8 +17,16 @@ const routes = {
 function router() {
     const current_hash = window.location.hash || '#/';
 
-    const content_function = routes[current_hash];
+    const link_list = document.querySelectorAll(".links a");
+    for (const link of link_list) {
+        if (link.getAttribute("href") === current_hash) {
+            link.classList.add("selected")
+        } else {
+            link.classList.remove("selected");
+        }
+    }
 
+    const content_function = routes[current_hash];
     const app_container = document.getElementById('app');
     
     if (content_function) {
