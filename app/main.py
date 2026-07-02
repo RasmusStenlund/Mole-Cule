@@ -252,7 +252,7 @@ async def limiting(data: LimitingFactor):
     excess_remnants = get_excess_remnants(limiting_reactant, reactants, reactants_mol)
 
     return {
-        "entered_equation": equation,
+        "equation": balanced_equation,
         "data": {
             "limiting_reactant": limiting_reactant,
             "theoretical_yields": theoretical_yields,

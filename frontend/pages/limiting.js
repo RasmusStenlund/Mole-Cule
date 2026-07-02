@@ -190,7 +190,7 @@ export function setup() {
             dict["reactants_mol"] = mol_dict;
             const response = await call_api(dict, "/limiting");
 
-            output_equation.textContent = response["entered_equation"];
+            output_equation.textContent = response["equation"];
 
             limiting_reactant.textContent = response["data"]["limiting_reactant"];
 
