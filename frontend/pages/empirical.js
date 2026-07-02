@@ -134,7 +134,6 @@ export function setup() {
     const hydrate_mass_input = document.getElementById("empirical-hydrate-mass");
     const anhydrous_mass_input = document.getElementById("empirical-anhydrous-mass");
 
-    const empirical_output = document.getElementById("empirical-empirical");
     const empirical_formula = document.getElementById("empirical-empirical-formula");
     const empirical_mass = document.getElementById("empirical-empirical-mass");
 
@@ -150,47 +149,49 @@ export function setup() {
     clear_button.addEventListener("click", function () {
         empirical_list.innerHTML = "";
         create_empirical_part(empirical_list);
+        molar_mass_input.value = ""
         output.classList.add("hidden");
         check.checked = false;
     })
 
     submit_button.addEventListener("click", async function () {
-        var molecular = false;
         const molar_mass = molar_mass_input.value.trim();
 
         const composition = make_composition(empirical_list);
         if (composition) {
-            if (molar_mass) {
-                if (isFinite(molar_mass)) {
-                    molecular = true
-                    molecular_output.classList.remove("hidden");
-                }
+            var molecular = false;
+            var dict = {};
+            dict["composition"] = composition;
+
+            if (isFinite(molar_mass) && molar_mass !== "") {
+                molecular = true
+                molecular_output.classList.remove("hidden");
+                dict["molar_mass"] = Number(molar_mass);
             } else {
                 molecular_output.classList.add("hidden");
             };
 
+            const hydrate_mass = hydrate_mass_input.value.trim();
+            const anhydrous_mass = anhydrous_mass_input.value.trim();
             if (check.checked) {
-                const hydrate_mass = hydrate_mass_input.value.trim();
-                const anhydrous_mass = anhydrous_mass_input.value.trim();
-                if (isFinite(hydrate_mass) && hydrate_mass !== "" && isFinite(anhydrous_mass) && anhydrous_mass !== "") {
-                    if (molecular) {
-                    molecular_formula.textContent = "Calculating hydrate";
-                    molecular_mass.textContent = "Calculating hydrate";
-                }
-                empirical_formula.textContent = "Calculating hydrate";
-                empirical_mass.textContent = "Calculating hydrate";
+                dict["is_hydrate"] = true;
+                if (hydrate_mass && anhydrous_mass) {   
+                    dict["hydrate_mass"] = Number(hydrate_mass);
+                    dict["anhydrous_mass"] = Number(anhydrous_mass);
+                } 
+            }
 
-                    output.classList.remove("hidden")
-                }
-            } else {
-                if (molecular) {
-                    molecular_formula.textContent = "Calculating";
-                    molecular_mass.textContent = "Calculating";
-                }
-                empirical_formula.textContent = "Calculating";
-                empirical_mass.textContent = "Calculating";
-                output.classList.remove("hidden")
-            };
+            const response = await call_api(dict, "/empirical");
+
+            empirical_formula.textContent = response["data"]["empirical"]["formula"];
+            empirical_mass.textContent = `${response["data"]["empirical"]["molar_mass"]} g/mol`;
+
+            if (molecular) {
+                molecular_formula.textContent = response["data"]["molecular"]["formula"];
+                molecular_mass.textContent = `${response["data"]["molecular"]["molar_mass"]} g/mol`;
+            }
+
+            output.classList.remove("hidden");
         }
     })
 

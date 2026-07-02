@@ -1,4 +1,4 @@
-const url = "http://127.0.0.1:8000";
+const url = "https://molecule.nordicpine.hackclub.app";
 
 export async function call_api(dict, endpoint) {
     const response = await fetch(`${url}${endpoint}`, {
