@@ -43,30 +43,18 @@ export function page() {
 
                 <div class = "theoretical">
                     <h4>Theoretical Yields</h4>
-                    <div class = "theo-yields-list">
+                    <div class = "theo-yields-list" id = "limiting-theoretical-yields">
                         <div class = "theo-yield">
-                            <p class = "product">XY</p>
-                            <span>:</span>
-                            <p class = "count">3.5 Mol</p>
+                            <p>XY</p>
+                            <p>:</p>
+                            <p>3.5 Mol</p>
                         </div>
                     </div>
                 </div>
 
                 <div class = "excess">
                     <h4>Excess Remnants</h4>
-                    <div class = "excess-remnants-list" id = "limiting-excess-remnants">
-                        <div class = "excess-remnant">
-                            <p class = "reactant">X2</p>
-                            <span>:</span>
-                            <p class = "count">0 Mol</p>
-                        </div>
-
-                        <div class = "excess-remnant">
-                            <span class = "reactant">Y</span>
-                            <span>:</span>
-                            <span class = "count">0.4 Mol</span>
-                        </div>
-                    </div>
+                    <div class = "excess-remnants-list" id = "limiting-excess-remnants"></div>
                 </div>
             </div>
         </div>
@@ -104,7 +92,7 @@ function mol_input_maker(reactants_list, mol_div) {
 
         const input_reactant = current_row.querySelector(".reactant");
 
-        input_reactant.textContent = reactant_inputs[i].value.trim();
+        input_reactant.textContent = reactant_inputs[i].value.trim().replace(/^\d+/, "");
 
         if (input_reactant.textContent === "") {
             current_row.classList.add("hidden")
@@ -129,7 +117,7 @@ function get_mol_dict(mol_div) {
         const mol = current_mol_div.querySelector(".mol").value.trim();
 
         if (isFinite(mol) && mol !== "") {
-            mol_dict[reactant] = mol;
+            mol_dict[reactant] = parseFloat(mol);
         } else {
             return false;
         }
@@ -138,7 +126,7 @@ function get_mol_dict(mol_div) {
     return mol_dict;
 }
 
-import {equation_buttons, equation_maker} from "../extra-functions.js";
+import {equation_buttons, equation_maker, call_api} from "../extra-functions.js";
 
 export function setup() {
     const add_reactant = document.getElementById("limiting-add-reactant");
@@ -155,8 +143,11 @@ export function setup() {
 
     const submit_button = document.getElementById("limiting-submit");
     const clear_button = document.getElementById("limiting-clear");
-    const output = document.getElementById("limiting-data")
-    const excess_remnants = document.getElementById("limiting-excess-remnants")
+    const output = document.getElementById("limiting-data");
+    const output_equation = document.getElementById("limiting-equation");
+    const excess_remnants = document.getElementById("limiting-excess-remnants");
+    const theo_yields = document.getElementById("limiting-theoretical-yields");
+    const limiting_reactant = document.getElementById("limiting-limiting-reactant");
 
     clear_button.addEventListener("click", function () {
         const reactant_input = document.createElement("input");
@@ -189,12 +180,66 @@ export function setup() {
         output.classList.add("hidden");
     })
 
-    submit_button.addEventListener("click", function () {
+    submit_button.addEventListener("click", async function () {
         const equation = equation_maker(reactants_list, products_list);
         const mol_dict = get_mol_dict(mol_list);
 
         if (equation && mol_dict) {
-            excess_remnants.innerHTML = ""
+            var dict = {};
+            dict["equation"] = equation;
+            dict["reactants_mol"] = mol_dict;
+            const response = await call_api(dict, "/limiting");
+
+            output_equation.textContent = response["entered_equation"];
+
+            limiting_reactant.textContent = response["data"]["limiting_reactant"];
+
+            const yield_dict = response["data"]["theoretical_yields"];
+            theo_yields.textContent = "";
+            for (const product in yield_dict) {
+                const container = document.createElement("div");
+                container.classList.add("theo-yield");
+
+                const product_p = document.createElement("p");
+                product_p.textContent = product;
+                container.appendChild(product_p);
+
+                const colon = document.createElement("p");
+                colon.textContent = ":";
+                container.appendChild(colon);
+
+                const value = document.createElement("p");
+                const mol = yield_dict[product]["mol"];
+                const mass = yield_dict[product]["grams"];
+                value.textContent = `${mol} mol (${mass} g)`;
+                container.appendChild(value);
+
+                theo_yields.appendChild(container);
+            }
+
+            const excess_dict = response["data"]["excess_remnants"];
+            excess_remnants.textContent = "";
+            for (const reactant in excess_dict) {
+                const container = document.createElement("div");
+                container.classList.add("excess-remnant");
+
+                const reactant_p = document.createElement("p");
+                reactant_p.textContent = reactant;
+                container.appendChild(reactant_p);
+
+                const colon = document.createElement("p");
+                colon.textContent = ":";
+                container.appendChild(colon);
+
+                const value = document.createElement("p");
+                const mol = excess_dict[reactant]["mol"];
+                const mass = excess_dict[reactant]["grams"];
+                value.textContent = `${mol} mol (${mass} g)`;
+                container.appendChild(value);
+
+                excess_remnants.appendChild(container);
+            }
+
             output.classList.remove("hidden");
         }
     })

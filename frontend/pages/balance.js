@@ -40,7 +40,7 @@ export function page() {
     `
 }
 
-import {equation_buttons, equation_maker} from "../extra-functions.js"
+import {equation_buttons, equation_maker, call_api} from "../extra-functions.js"
 
 export function setup() {
     const add_reactant = document.getElementById("balance-add-reactant");
@@ -84,11 +84,15 @@ export function setup() {
         output.classList.add("hidden");
     })
 
-    submit_button.addEventListener("click", function () {
+    submit_button.addEventListener("click", async function () {
         const equation = equation_maker(reactants_list, products_list)
         if (equation) {
-            entered.textContent = equation;
-            balanced.textContent = "Calculating"
+            var dict = {};
+            dict["equation"] = equation;
+
+            const response = await call_api(dict, "/balance");
+            entered.textContent = response["entered_equation"]
+            balanced.textContent = response["data"]["balanced_equation"];
             output.classList.remove("hidden")
         }
     })

@@ -115,6 +115,8 @@ function make_composition(empirical_list) {
     return composition;
 }
 
+import {call_api} from "../extra-functions.js";
+
 export function setup() {
     const empirical_list = document.getElementById("empirical-part-list");
     const add_element = document.getElementById("empirical-add-element");
@@ -152,7 +154,7 @@ export function setup() {
         check.checked = false;
     })
 
-    submit_button.addEventListener("click", function () {
+    submit_button.addEventListener("click", async function () {
         var molecular = false;
         const molar_mass = molar_mass_input.value.trim();
 
