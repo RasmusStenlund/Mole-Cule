@@ -1,9 +1,9 @@
 from fastapi import HTTPException
 
-from app.data.elements import elements_list
+from data.elements import elements_list
 
-from app.services.compound_info import get_composition, seperate_state
-from app.services.equation_info import equation_to_dicts
+from services.compound_info import get_composition, seperate_state
+from services.equation_info import equation_to_dicts
 
 def validate_element(element: str):
     if not element:

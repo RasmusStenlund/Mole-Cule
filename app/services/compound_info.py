@@ -2,7 +2,7 @@ from fastapi import HTTPException
 
 import re
 
-from app.data.elements import elements_list
+from data.elements import elements_list
 
 def seperate_state(formula: str):
 

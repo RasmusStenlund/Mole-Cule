@@ -2,7 +2,7 @@ from fastapi import HTTPException
 
 import re       
 
-from app.services.compound_info import get_molar_mass, get_composition, seperate_state
+from services.compound_info import get_molar_mass, get_composition, seperate_state
 
 
 def equation_to_dicts(equation:str):

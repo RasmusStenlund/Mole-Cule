@@ -2,12 +2,12 @@ from fastapi import FastAPI, HTTPException, Request, Response, Depends
 from typing import Optional
 from pydantic import BaseModel, Field
 
-from app.services.compound_info import get_composition, get_molar_mass, convert_mass_mole, get_elements_data, seperate_state
-from app.services.equation_info import equation_to_dicts, get_limiting_ratios, get_limiting_reactant, get_theoretical_yields, get_excess_remnants
-from app.services.validation import validate_equation, validate_quantity_dict, validate_formula, validate_composition
-from app.services.balance import balance_equation
-from app.services.empirical import get_empirical
-from app.services.rate_limiter import rate_limiter_store
+from services.compound_info import get_composition, get_molar_mass, convert_mass_mole, get_elements_data, seperate_state
+from services.equation_info import equation_to_dicts, get_limiting_ratios, get_limiting_reactant, get_theoretical_yields, get_excess_remnants
+from services.validation import validate_equation, validate_quantity_dict, validate_formula, validate_composition
+from services.balance import balance_equation
+from services.empirical import get_empirical
+from services.rate_limiter import rate_limiter_store
 
 app = FastAPI(title="Mole-Cule API", description = "This is the API used for the tool Mole-Cule.")
 

@@ -2,8 +2,8 @@ from fastapi import HTTPException
 
 from fractions import Fraction
 
-from app.data.elements import elements_list
-from app.services.compound_info import get_molar_mass, get_composition
+from data.elements import elements_list
+from services.compound_info import get_molar_mass, get_composition
 
 def reorder_elements(elements: list):
     temporary_elements = elements.copy()

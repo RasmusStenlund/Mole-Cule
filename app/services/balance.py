@@ -2,8 +2,8 @@ from fractions import Fraction
 
 from fastapi import HTTPException
 
-from app.services.equation_info import equation_to_dicts
-from app.services.compound_info import get_composition, seperate_state
+from services.equation_info import equation_to_dicts
+from services.compound_info import get_composition, seperate_state
 
 
 
