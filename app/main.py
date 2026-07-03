@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request, Response, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from pydantic import BaseModel, Field
 
@@ -10,6 +11,18 @@ from services.empirical import get_empirical
 from services.rate_limiter import rate_limiter_store
 
 app = FastAPI(title="Mole-Cule API", description = "This is the API used for the tool Mole-Cule.")
+
+origins = [
+    "https://rasmusstenlund.github.io/Mole-Cule/",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.state.testing = False
 
