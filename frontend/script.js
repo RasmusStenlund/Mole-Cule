@@ -1,3 +1,6 @@
+import {setup_menu} from "./pages/menu.js"
+setup_menu()
+
 import * as home from "./pages/home.js"
 import * as analyze from "./pages/analyze.js"
 import * as convert from "./pages/convert.js"
@@ -19,6 +22,15 @@ function router() {
 
     const link_list = document.querySelectorAll(".links a");
     for (const link of link_list) {
+        if (link.getAttribute("href") === current_hash) {
+            link.classList.add("selected")
+        } else {
+            link.classList.remove("selected");
+        }
+    }
+
+    const menu_list = document.querySelectorAll(".side-menu a");
+    for (const link of menu_list) {
         if (link.getAttribute("href") === current_hash) {
             link.classList.add("selected")
         } else {

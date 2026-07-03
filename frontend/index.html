@@ -5,11 +5,12 @@
     <meta charset = "UTF-8">
     <meta name = "viewport" content = "width=device-width, initial-scale=1">
     <link rel = "stylesheet" href = "style.css">
+    <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
-    <div class = "header">
-        <a href="#/">Mole-Cule</a>
+    <div class = "header" id = "nav-bar">
+        <a href="#/" class = "logo">Mole-Cule</a>
 
         <div class = "links">
             <a href="#/analyze">Analyze</a>
@@ -18,6 +19,18 @@
             <a href="#/empirical">Empirical</a>
             <a href="#/limiting">Limiting</a>
         </div>
+
+        <a href="javascript:void(0);" class = "icon" id = "menu-button">
+            <i class="fa-solid fa-bars"></i>
+        </a>
+    </div>
+
+    <div class="side-menu" id="side-menu">
+        <a href="#/analyze">Analyze</a>
+        <a href="#/convert">Convert</a>
+        <a href="#/balance">Balance</a>
+        <a href="#/empirical">Empirical</a>
+        <a href="#/limiting">Limiting</a>
     </div>
 
     <div id="app"></div>
