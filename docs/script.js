@@ -44,7 +44,7 @@ function router() {
     if (content_function) {
         app_container.innerHTML = content_function.page();
 
-        if (content_function.setup()) {
+        if (content_function.setup) {
             content_function.setup();
         }
     
