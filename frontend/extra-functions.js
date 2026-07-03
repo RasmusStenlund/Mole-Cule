@@ -9,7 +9,13 @@ export async function call_api(dict, endpoint) {
         }
     })
 
-    return await response.json()
+    const data = await response.json()
+
+    return {
+        ok: response.ok,
+        code: response.status,
+        data: data,
+    }
 }
 
 export function equation_buttons(reactants_list, add_reactant, products_list, add_product) {

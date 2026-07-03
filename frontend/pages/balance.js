@@ -36,6 +36,11 @@ export function page() {
                     <p id = "balance-balanced-equation" class = "balance-equation-text">2X + Y -> X2Y</p>
                 </div>
             </div>
+
+            <div class = "error hidden" id = "balance-error">
+                <h3 id = "balance-error-code"></h3>
+                <p id = "balance-error-detail"></p>
+            </div>
         </div>
     `
 }
@@ -55,6 +60,10 @@ export function setup() {
     const clear_button = document.getElementById("balance-clear");
     const entered = document.getElementById("balance-entered-equation");
     const balanced = document.getElementById("balance-balanced-equation");
+
+    const error = document.getElementById("balance-error");
+    const error_code = document.getElementById("balance-error-code");
+    const error_detail = document.getElementById("balance-error-detail");
 
     clear_button.addEventListener("click", function () {
         const reactant_input = document.createElement("input");
@@ -82,18 +91,28 @@ export function setup() {
         products_list.appendChild(product_container);
 
         output.classList.add("hidden");
+        error.classList.add("hidden");
     })
 
     submit_button.addEventListener("click", async function () {
         const equation = equation_maker(reactants_list, products_list)
-        if (equation) {
-            var dict = {};
-            dict["equation"] = equation;
+        var dict = {};
+        dict["equation"] = equation;
+        const response = await call_api(dict, "/balance");
+        const response_data = response["data"];
 
-            const response = await call_api(dict, "/balance");
-            entered.textContent = response["entered_equation"]
-            balanced.textContent = response["data"]["balanced_equation"];
+        if (response["ok"]) {
+            error.classList.add("hidden")
+            entered.textContent = response_data["entered_equation"]
+            balanced.textContent = response_data["data"]["balanced_equation"];
             output.classList.remove("hidden")
-        }
+        } else {
+            output.classList.add("hidden");
+
+            error_code.textContent = response["code"];
+            error_detail.textContent = response["data"]["detail"];
+
+            error.classList.remove("hidden");
+        };
     })
 }

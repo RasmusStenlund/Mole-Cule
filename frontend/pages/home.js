@@ -14,7 +14,11 @@ export function page() {
             </div>
         </div>
 
-        <p>Element masses are to three decimal places and are based primarily on the CIAAW list of abridged atomic weights</p>
-    </div
+        <p>
+            Element masses are to three decimal places and are based primarily on the
+            <a id="home-ciaaw-link" href="https://www.ciaaw.org/abridged-atomic-weights.htm">CIAAW list</a>
+            of abridged atomic weights.
+        </p>
+    </div>
     `
-}
+};

@@ -42,6 +42,11 @@ export function page() {
                     </div>
                 </div>
             </div>
+
+            <div class = "error hidden" id = "convert-error">
+                <h3 id = "convert-error-code"></h3>
+                <p id = "convert-error-detail"></p>
+            </div>
         </div>
     `
 }
@@ -62,33 +67,48 @@ export function setup() {
     const output_mass = document.getElementById("convert-data-mass");
     const output_mol = document.getElementById("convert-data-mol");
 
+    const error = document.getElementById("convert-error");
+    const error_code = document.getElementById("convert-error-code");
+    const error_detail = document.getElementById("convert-error-detail");
+
     submit_button.addEventListener("click", async function () {
         var formula = formula_input.value;
-        var unit_count = unit_input.value;
-
         formula = formula.trim();
-        if (formula && unit_count) {
-            var dict = {}
-            dict["formula"] = formula;
-            if (radio_mass.checked) {
-                dict["mass"] = unit_count;
-            } else {
-                dict["mol"] = unit_count;
-            };  
+    
+        var unit_count = unit_input.value;
+        
+        var dict = {}
+        dict["formula"] = formula;
+        if (radio_mass.checked) {
+            dict["mass"] = unit_count;
+        } else {
+            dict["mol"] = unit_count;
+        };  
 
-            const response = await call_api(dict, "/convert");
+        const response = await call_api(dict, "/convert");
+        const response_data = response["data"];
 
-            output_formula.textContent = response["entered_formula"];
+        if (response["ok"]) {
+            error.classList.add("hidden")
+
+            output_formula.textContent = response_data["entered_formula"];
             if (radio_mass.checked) {
-                output_mass.textContent = response["entered_mass"]
-                output_mol.textContent = response["data"]["mol"]
+                output_mass.textContent = response_data["entered_mass"]
+                output_mol.textContent = response_data["data"]["mol"]
             } else {
-                output_mol.textContent = response["entered_mol"]
-                output_mass.textContent = response["data"]["mass"]
+                output_mol.textContent = response_data["entered_mol"]
+                output_mass.textContent = response_data["data"]["mass"]
             };
             
 
             output.classList.remove("hidden");
+        } else {
+            output.classList.add("hidden");
+
+            error_code.textContent = response["code"];
+            error_detail.textContent = response["data"]["detail"];
+
+            error.classList.remove("hidden");
         }
     })
 
@@ -96,6 +116,7 @@ export function setup() {
         formula_input.value = "";
         unit_input.value = "";
         output.classList.add("hidden");
+        error.classList.add("hidden");
     })
     
 }

@@ -57,6 +57,11 @@ export function page() {
                     <div class = "excess-remnants-list" id = "limiting-excess-remnants"></div>
                 </div>
             </div>
+
+            <div class = "error hidden" id = "limiting-error">
+                <h3 id = "limiting-error-code"></h3>
+                <p id = "limiting-error-detail"></p>
+            </div>
         </div>
     `
 }
@@ -149,6 +154,10 @@ export function setup() {
     const theo_yields = document.getElementById("limiting-theoretical-yields");
     const limiting_reactant = document.getElementById("limiting-limiting-reactant");
 
+    const error = document.getElementById("limiting-error");
+    const error_code = document.getElementById("limiting-error-code");
+    const error_detail = document.getElementById("limiting-error-detail");
+
     clear_button.addEventListener("click", function () {
         const reactant_input = document.createElement("input");
         reactant_input.type = "text";
@@ -178,23 +187,27 @@ export function setup() {
         mol_input_maker(reactants_list, mol_list);
 
         output.classList.add("hidden");
+        error.classList.add("hidden");
     })
 
     submit_button.addEventListener("click", async function () {
         const equation = equation_maker(reactants_list, products_list);
         const mol_dict = get_mol_dict(mol_list);
 
-        if (equation && mol_dict) {
-            var dict = {};
-            dict["equation"] = equation;
-            dict["reactants_mol"] = mol_dict;
-            const response = await call_api(dict, "/limiting");
+        var dict = {};
+        dict["equation"] = equation;
+        dict["reactants_mol"] = mol_dict;
+        const response = await call_api(dict, "/limiting");
+        const response_data = response["data"];
+        
+        if (response["ok"]) {
+            error.classList.add("hidden");
 
-            output_equation.textContent = response["equation"];
+            output_equation.textContent = response_data["equation"];
 
-            limiting_reactant.textContent = response["data"]["limiting_reactant"];
+            limiting_reactant.textContent = response_data["data"]["limiting_reactant"];
 
-            const yield_dict = response["data"]["theoretical_yields"];
+            const yield_dict = response_data["data"]["theoretical_yields"];
             theo_yields.textContent = "";
             for (const product in yield_dict) {
                 const container = document.createElement("div");
@@ -217,7 +230,7 @@ export function setup() {
                 theo_yields.appendChild(container);
             }
 
-            const excess_dict = response["data"]["excess_remnants"];
+            const excess_dict = response_data["data"]["excess_remnants"];
             excess_remnants.textContent = "";
             for (const reactant in excess_dict) {
                 const container = document.createElement("div");
@@ -241,6 +254,13 @@ export function setup() {
             }
 
             output.classList.remove("hidden");
+        } else {
+            output.classList.add("hidden");
+
+            error_code.textContent = response["code"];
+            error_detail.textContent = response["data"]["detail"];
+
+            error.classList.remove("hidden");
         }
     })
 }

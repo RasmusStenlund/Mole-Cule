@@ -58,7 +58,7 @@ body {
 }
 /* Multiple pages */
 
-p, h4, h1 {
+p, h4, h1, h3 {
     margin: 0px;
 }
 
@@ -163,6 +163,18 @@ input[type = "text"] {
     background-color: #71719b;
  }
 
+ .error {
+    display: flex;
+    flex-direction: column;
+    background-color:rgb(31, 31, 34);
+    align-items: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    gap: 20px;
+    border-radius: 10px;
+    width: clamp(350px, 40vw, 40vw);
+ }
+
 /* Home */
 
 .home {
@@ -190,6 +202,17 @@ input[type = "text"] {
     display: flex;
     flex-direction: column;
     row-gap: 10px;
+}
+
+.home .info {
+    display: flex;
+}
+
+#home-ciaaw-link {
+    background-color: transparent;
+    color: white;
+    border: 0px;
+    font-size: 1rem;
 }
 
 /* Analyze */
@@ -345,6 +368,10 @@ input[type = "text"] {
 
     .analyze .data .desktop {
         display: none;
+    }
+
+    .analyze .error {
+        width: clamp(300px, 90vw, 90vw);
     }
 }
 

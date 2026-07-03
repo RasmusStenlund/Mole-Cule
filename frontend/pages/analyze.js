@@ -27,6 +27,11 @@ export function page() {
                 </div>
                 <div id = "analyze-card-container"></div>
             </div>
+
+            <div class = "error hidden" id = "analyze-error">
+                <h3 id = "analyze-error-code"></h3>
+                <p id = "analyze-error-detail"></p>
+            </div>
         </div>
     `
 }
@@ -50,20 +55,24 @@ export function setup() {
     const mol_mass = document.getElementById("analyze-molar-mass");
     const card_container = document.getElementById("analyze-card-container");
 
-
+    const error = document.getElementById("analyze-error");
+    const error_code = document.getElementById("analyze-error-code");
+    const error_detail = document.getElementById("analyze-error-detail");
 
     submit_button.addEventListener("click", async function () {
         var formula = formula_input.value;
         formula = formula.trim()
+        var dict = {};
+        dict["formula"] = formula;
+        const response = await call_api(dict, "/analyze");
 
-        if (formula) {
-            var dict = {};
-            dict["formula"] = formula;
-            const response = await call_api(dict, "/analyze");
-            const molar_mass = response["molar_mass"];
-            mol_mass.textContent = `Molar mass: ${response["molar_mass"]} g/mol`
+        if (response["ok"]) {
+            error.classList.add("hidden")
+            const response_data = response["data"]
+            const molar_mass = response_data["molar_mass"];
+            mol_mass.textContent = `Molar mass: ${response_data["molar_mass"]} g/mol`
 
-            const elements_data = response["elements_data"];
+            const elements_data = response_data["elements_data"];
             card_container.innerHTML = "";
             for (let element in elements_data) {
                 const card = document.createElement("div");
@@ -105,13 +114,21 @@ export function setup() {
             output.classList.remove("hidden")
 
             formula_output.textContent = formula;
+        } else {
+            output.classList.add("hidden");
+
+            error_code.textContent = response["code"];
+            error_detail.textContent = response["data"]["detail"];
+
+            error.classList.remove("hidden");
         }
     })
 
     clear_button.addEventListener("click", function () {
-        formula_input.value = ""
+        formula_input.value = "";
         
-        output.classList.add("hidden")
+        output.classList.add("hidden");
+        error.classList.add("hidden");
     })
 
 }

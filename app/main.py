@@ -17,7 +17,7 @@ class AnalyzeFormula(BaseModel):
     formula: Optional[str] = ""
 
 class BalanceEquation(BaseModel):
-    equation: str
+    equation: Optional[str] = ""
 
 class Convert(BaseModel):
     formula: Optional[str] = ""
@@ -25,8 +25,8 @@ class Convert(BaseModel):
     mol: Optional[float] = None
 
 class LimitingFactor(BaseModel):
-    equation: str
-    reactants_mol: dict
+    equation: Optional[str] = ""
+    reactants_mol: Optional[dict] = None
 
 
 class EmpiricalFormula(BaseModel):
