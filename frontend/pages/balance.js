@@ -118,7 +118,7 @@ export function setup() {
         } else {
             output.classList.add("hidden");
             error_code.textContent = error_codes[422];
-            error_detail.textContent = "Complete equation missing";
+            error_detail.textContent = "Complete equation is missing";
 
             error.classList.remove("hidden");
         }

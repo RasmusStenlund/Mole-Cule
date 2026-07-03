@@ -124,14 +124,20 @@ function get_mol_dict(mol_div) {
         if (isFinite(mol) && mol !== "") {
             mol_dict[reactant] = parseFloat(mol);
         } else {
-            return false;
+            var reason = ""
+            if (mol === "") {
+                reason = "Missing mol for reactant(s)"
+            } else {
+                reason = "Reactant(s) mol must be a number"
+            }
+            return {"status": false, "data": reason};
         }
     }
 
-    return mol_dict;
+    return {"status": true, "data": mol_dict};
 }
 
-import {equation_buttons, equation_maker, call_api} from "../extra-functions.js";
+import {equation_buttons, equation_maker, call_api, error_codes} from "../extra-functions.js";
 
 export function setup() {
     const add_reactant = document.getElementById("limiting-add-reactant");
@@ -192,73 +198,94 @@ export function setup() {
 
     submit_button.addEventListener("click", async function () {
         const equation = equation_maker(reactants_list, products_list);
-        const mol_dict = get_mol_dict(mol_list);
+        const mol_data = get_mol_dict(mol_list);
 
-        var dict = {};
-        dict["equation"] = equation;
-        dict["reactants_mol"] = mol_dict;
-        const response = await call_api(dict, "/limiting");
-        const response_data = response["data"];
         
-        if (response["ok"]) {
-            error.classList.add("hidden");
+        if (equation) {
+            if (mol_data["status"]) {
+                const mol_dict = mol_data["data"];
 
-            output_equation.textContent = response_data["equation"];
+                var dict = {};
+                dict["equation"] = equation;
+                dict["reactants_mol"] = mol_dict;
+                const response = await call_api(dict, "/limiting");
+                const response_data = response["data"];
 
-            limiting_reactant.textContent = response_data["data"]["limiting_reactant"];
+                if (response["ok"]) {
+                    error.classList.add("hidden");
 
-            const yield_dict = response_data["data"]["theoretical_yields"];
-            theo_yields.textContent = "";
-            for (const product in yield_dict) {
-                const container = document.createElement("div");
-                container.classList.add("theo-yield");
+                    output_equation.textContent = response_data["equation"];
 
-                const product_p = document.createElement("p");
-                product_p.textContent = product;
-                container.appendChild(product_p);
+                    limiting_reactant.textContent = response_data["data"]["limiting_reactant"];
 
-                const colon = document.createElement("p");
-                colon.textContent = ":";
-                container.appendChild(colon);
+                    const yield_dict = response_data["data"]["theoretical_yields"];
+                    theo_yields.textContent = "";
+                    for (const product in yield_dict) {
+                        const container = document.createElement("div");
+                        container.classList.add("theo-yield");
 
-                const value = document.createElement("p");
-                const mol = yield_dict[product]["mol"];
-                const mass = yield_dict[product]["grams"];
-                value.textContent = `${mol} mol (${mass} g)`;
-                container.appendChild(value);
+                        const product_p = document.createElement("p");
+                        product_p.textContent = product;
+                        container.appendChild(product_p);
 
-                theo_yields.appendChild(container);
+                        const colon = document.createElement("p");
+                        colon.textContent = ":";
+                        container.appendChild(colon);
+
+                        const value = document.createElement("p");
+                        const mol = yield_dict[product]["mol"];
+                        const mass = yield_dict[product]["grams"];
+                        value.textContent = `${mol} mol (${mass} g)`;
+                        container.appendChild(value);
+
+                        theo_yields.appendChild(container);
+                    }
+
+                    const excess_dict = response_data["data"]["excess_remnants"];
+                    excess_remnants.textContent = "";
+                    for (const reactant in excess_dict) {
+                        const container = document.createElement("div");
+                        container.classList.add("excess-remnant");
+
+                        const reactant_p = document.createElement("p");
+                        reactant_p.textContent = reactant;
+                        container.appendChild(reactant_p);
+
+                        const colon = document.createElement("p");
+                        colon.textContent = ":";
+                        container.appendChild(colon);
+
+                        const value = document.createElement("p");
+                        const mol = excess_dict[reactant]["mol"];
+                        const mass = excess_dict[reactant]["grams"];
+                        value.textContent = `${mol} mol (${mass} g)`;
+                        container.appendChild(value);
+
+                        excess_remnants.appendChild(container);
+                    }
+
+                    output.classList.remove("hidden");
+                } else {
+                    output.classList.add("hidden");
+
+                    error_code.textContent = error_codes[response["code"]];
+                    error_detail.textContent = response["data"]["detail"];
+
+                    error.classList.remove("hidden");
+                }
+            } else {
+                output.classList.add("hidden");
+
+                error_code.textContent = error_codes[422];
+                error_detail.textContent = mol_data["data"];
+
+                error.classList.remove("hidden");
             }
-
-            const excess_dict = response_data["data"]["excess_remnants"];
-            excess_remnants.textContent = "";
-            for (const reactant in excess_dict) {
-                const container = document.createElement("div");
-                container.classList.add("excess-remnant");
-
-                const reactant_p = document.createElement("p");
-                reactant_p.textContent = reactant;
-                container.appendChild(reactant_p);
-
-                const colon = document.createElement("p");
-                colon.textContent = ":";
-                container.appendChild(colon);
-
-                const value = document.createElement("p");
-                const mol = excess_dict[reactant]["mol"];
-                const mass = excess_dict[reactant]["grams"];
-                value.textContent = `${mol} mol (${mass} g)`;
-                container.appendChild(value);
-
-                excess_remnants.appendChild(container);
-            }
-
-            output.classList.remove("hidden");
         } else {
             output.classList.add("hidden");
 
-            error_code.textContent = response["code"];
-            error_detail.textContent = response["data"]["detail"];
+            error_code.textContent = error_codes[422];
+            error_detail.textContent = "Complete equation is missing";
 
             error.classList.remove("hidden");
         }

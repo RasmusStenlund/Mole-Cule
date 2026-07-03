@@ -109,18 +109,26 @@ function make_composition(empirical_list) {
         } else if (!(element) && !(percent)) {
             continue
         } else {
-            return false;
+            var reason = ""
+            if (!(element)) {
+                reason = "Element(s) in composition missing";
+            } else if (percent === "") {
+                reason = "Percentage(s) in composition missing";
+            } else {
+                reason = "Percentage(s) must be a number";
+            }
+            return {"status": false, "data": reason};
         }
     }
 
     if (Object.keys(composition).length == 0) {
-        return false;
+        return {"status": false, "data": "No elements in composition"};
     }
 
-    return composition;
+    return {"status": true, "data": composition};
 }
 
-import {call_api} from "../extra-functions.js";
+import {call_api, error_codes} from "../extra-functions.js";
 
 export function setup() {
     const empirical_list = document.getElementById("empirical-part-list");
@@ -165,50 +173,99 @@ export function setup() {
     })
 
     submit_button.addEventListener("click", async function () {
+        const composition_data = make_composition(empirical_list);
         const molar_mass = molar_mass_input.value.trim();
+        
+        if (composition_data["status"]) {
+            const composition = composition_data["data"];
+            var molecular = false;
+            var verify_mol = true;
 
-        const composition = make_composition(empirical_list);
-        var molecular = false;
-        var dict = {};
-        dict["composition"] = composition;
+            var hydrate = false;
+            var verify_hydrate = true;
+            var hydrate_error = "";
 
-        if (molar_mass !== "") {
-            molecular = true
-            molecular_output.classList.remove("hidden");
-            dict["molar_mass"] = molar_mass;
-        } else {
-            molecular_output.classList.add("hidden");
-        };
+            var dict = {};
+            dict["composition"] = composition;
 
-        const hydrate_mass = hydrate_mass_input.value.trim();
-        const anhydrous_mass = anhydrous_mass_input.value.trim();
-        if (check.checked) {
-            dict["is_hydrate"] = true;
-            if (hydrate_mass && anhydrous_mass) {   
-                dict["hydrate_mass"] = hydrate_mass;
-                dict["anhydrous_mass"] = anhydrous_mass;
-            } 
-        }
+            if (molar_mass !== "") {
+                molecular = true
+                
+                if (isFinite(molar_mass)) {
+                    molecular_output.classList.remove("hidden");
+                    dict["molar_mass"] = molar_mass;
+                    verify_mol = true;
+                } else {
+                    verify_mol = false;
+                }
+            } else {
+                molecular_output.classList.add("hidden");
+            };
 
-        const response = await call_api(dict, "/empirical");
-        const response_data = response["data"];
+            const hydrate_mass = hydrate_mass_input.value.trim();
+            const anhydrous_mass = anhydrous_mass_input.value.trim();
 
-        if (response["ok"]) {
-            error.classList.add("hidden");
-            empirical_formula.textContent = response_data["data"]["empirical"]["formula"];
-            empirical_mass.textContent = `${response_data["data"]["empirical"]["molar_mass"]} g/mol`;
-
-            if (molecular) {
-                molecular_formula.textContent = response_data["data"]["molecular"]["formula"];
-                molecular_mass.textContent = `${response_data["data"]["molecular"]["molar_mass"]} g/mol`;
+            if (check.checked) {
+                dict["is_hydrate"] = true;
+                hydrate = true;
+                verify_hydrate = false;
+                if (!(hydrate_mass) && !(anhydrous_mass)) {   
+                    hydrate_error = "Hydrate and anhydrous masses are missing"
+                } else if (!(hydrate_mass)) {
+                    hydrate_error = "Hydrate mass is missing"
+                } else if (!(anhydrous_mass)) {
+                    hydrate_error = "Anhydrous mass is missing"
+                } else if (!(isFinite(hydrate_mass)) || !(isFinite(anhydrous_mass))){
+                    hydrate_error = "Hydrate and anhydrous masses must be numbers"  
+                } else {
+                    verify_hydrate = true;
+                    dict["hydrate_mass"] = hydrate_mass;
+                    dict["anhydrous_mass"] = anhydrous_mass;
+                }
             }
 
-            output.classList.remove("hidden");
+            if (molecular && !(verify_mol)) {
+                output.classList.add("hidden")
+
+                error_code.textContent = error_codes[422];
+                error_detail.textContent = "Molar mass must be a number";
+
+                error.classList.remove("hidden");
+            } else if (hydrate && !(verify_hydrate)){
+                output.classList.add("hidden");
+
+                error_code.textContent = error_codes[422];
+                error_detail.textContent = hydrate_error;
+
+                error.classList.remove("hidden");
+            } else {
+                const response = await call_api(dict, "/empirical");
+                const response_data = response["data"];
+                if (response["ok"]) {
+                    error.classList.add("hidden");
+                    empirical_formula.textContent = response_data["data"]["empirical"]["formula"];
+                    empirical_mass.textContent = `${response_data["data"]["empirical"]["molar_mass"]} g/mol`;
+
+                    if (molecular) {
+                        molecular_formula.textContent = response_data["data"]["molecular"]["formula"];
+                        molecular_mass.textContent = `${response_data["data"]["molecular"]["molar_mass"]} g/mol`;
+                    }
+
+                    output.classList.remove("hidden");
+                } else {
+                    output.classList.add("hidden");
+
+                    error_code.textContent = error_codes[response["code"]];
+                    error_detail.textContent = response["data"]["detail"];
+
+                    error.classList.remove("hidden");
+                }
+            }
         } else {
             output.classList.add("hidden");
 
-            error_code.textContent = response["code"];
-            error_detail.textContent = response["data"]["detail"];
+            error_code.textContent = error_codes[422];
+            error_detail.textContent = composition_data["data"];
 
             error.classList.remove("hidden");
         }
