@@ -45,7 +45,7 @@ export function page() {
     `
 }
 
-import {equation_buttons, equation_maker, call_api} from "../extra-functions.js"
+import {equation_buttons, equation_maker, call_api, error_codes} from "../extra-functions.js"
 
 export function setup() {
     const add_reactant = document.getElementById("balance-add-reactant");
@@ -96,23 +96,31 @@ export function setup() {
 
     submit_button.addEventListener("click", async function () {
         const equation = equation_maker(reactants_list, products_list)
-        var dict = {};
-        dict["equation"] = equation;
-        const response = await call_api(dict, "/balance");
-        const response_data = response["data"];
+        if (equation) {
+            var dict = {};
+            dict["equation"] = equation;
+            const response = await call_api(dict, "/balance");
+            const response_data = response["data"];
 
-        if (response["ok"]) {
-            error.classList.add("hidden")
-            entered.textContent = response_data["entered_equation"]
-            balanced.textContent = response_data["data"]["balanced_equation"];
-            output.classList.remove("hidden")
+            if (response["ok"]) {
+                error.classList.add("hidden")
+                entered.textContent = response_data["entered_equation"]
+                balanced.textContent = response_data["data"]["balanced_equation"];
+                output.classList.remove("hidden")
+            } else {
+                output.classList.add("hidden");
+
+                error_code.textContent = error_codes[response["code"]];
+                error_detail.textContent = response["data"]["detail"];
+
+                error.classList.remove("hidden");
+            };
         } else {
             output.classList.add("hidden");
-
-            error_code.textContent = response["code"];
-            error_detail.textContent = response["data"]["detail"];
+            error_code.textContent = error_codes[422];
+            error_detail.textContent = "Complete equation missing";
 
             error.classList.remove("hidden");
-        };
+        }
     })
 }

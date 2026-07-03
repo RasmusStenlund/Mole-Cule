@@ -18,6 +18,12 @@ export async function call_api(dict, endpoint) {
     }
 }
 
+export const error_codes = {
+    422: "Invalid input",
+    429: "Too Fast! Slow down",
+    500: "Server error",
+}
+
 export function equation_buttons(reactants_list, add_reactant, products_list, add_product) {
     add_reactant.addEventListener("click", function () {
         const last_input = reactants_list.lastElementChild;

@@ -51,7 +51,7 @@ export function page() {
     `
 }
 
-import {call_api} from "../extra-functions.js";
+import {call_api, error_codes} from "../extra-functions.js";
 
 export function setup() {
     const formula_input = document.getElementById("convert-formula");
@@ -77,36 +77,54 @@ export function setup() {
     
         var unit_count = unit_input.value;
         
-        var dict = {}
-        dict["formula"] = formula;
-        if (radio_mass.checked) {
-            dict["mass"] = unit_count;
-        } else {
-            dict["mol"] = unit_count;
-        };  
-
-        const response = await call_api(dict, "/convert");
-        const response_data = response["data"];
-
-        if (response["ok"]) {
-            error.classList.add("hidden")
-
-            output_formula.textContent = response_data["entered_formula"];
+        if (formula && unit_count) {
+            var dict = {}
+            dict["formula"] = formula;
             if (radio_mass.checked) {
-                output_mass.textContent = response_data["entered_mass"]
-                output_mol.textContent = response_data["data"]["mol"]
+                dict["mass"] = unit_count;
             } else {
-                output_mol.textContent = response_data["entered_mol"]
-                output_mass.textContent = response_data["data"]["mass"]
-            };
-            
+                dict["mol"] = unit_count;
+            };  
 
-            output.classList.remove("hidden");
+            const response = await call_api(dict, "/convert");
+            const response_data = response["data"];
+
+            if (response["ok"]) {
+                error.classList.add("hidden")
+
+                output_formula.textContent = response_data["entered_formula"];
+                if (radio_mass.checked) {
+                    output_mass.textContent = response_data["entered_mass"]
+                    output_mol.textContent = response_data["data"]["mol"]
+                } else {
+                    output_mol.textContent = response_data["entered_mol"]
+                    output_mass.textContent = response_data["data"]["mass"]
+                };
+                
+
+                output.classList.remove("hidden");
+            } else {
+                output.classList.add("hidden");
+                if (!(isFinite(unit_count))) {
+                    error_detail.textContent = "Amount must be number";
+                } else {
+                    error_detail.textContent = response["data"]["detail"];
+                }
+
+                error_code.textContent = error_codes[response["code"]];
+                error.classList.remove("hidden");
+            }
         } else {
-            output.classList.add("hidden");
-
-            error_code.textContent = response["code"];
-            error_detail.textContent = response["data"]["detail"];
+            error_code.textContent = error_codes[422];
+            var missing = ""
+            if (formula && !(unit_count)) {
+                missing = "Amount"
+            } else if (!(formula) && unit_count) {
+                missing = "Formula"
+            } else {
+                missing = "Formula and amount"
+            }
+            error_detail.textContent = `${missing} missing`
 
             error.classList.remove("hidden");
         }
