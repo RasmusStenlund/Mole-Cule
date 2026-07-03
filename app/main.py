@@ -13,7 +13,7 @@ from services.rate_limiter import rate_limiter_store
 app = FastAPI(title="Mole-Cule API", description = "This is the API used for the tool Mole-Cule.")
 
 origins = [
-    "https://rasmusstenlund.github.io/Mole-Cule/",
+    "https://rasmusstenlund.github.io",
 ]
 
 app.add_middleware(
