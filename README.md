@@ -1,7 +1,7 @@
 <img src="images/mole-cule-banner.png" alt="Molecule Banner" width="650"/>
 
 # Mole-Cule
-A fast web-based chemistry tool for performing molecular calculations faster and with fewer errors.
+A fast web-based chemistry tool for performing molecular calculations faster and with fewer errors. I built it because I wanted a tool that I could use as help when doing chemstry problems, since they are either really repetitive or take a lot of unecessary time. I also made it to learn new stuff, e.g taking mass percents and knowing how to turn them into a formula and balancing equations using matrices instead of trial and error. I have also gotten Much better at coding.
 
 [Website](https://rasmusstenlund.github.io/Mole-Cule/) | [API Docs](https://molecule.nordicpine.hackclub.app/docs)
 
