@@ -45,6 +45,6 @@ uvicorn main:app --reload
 This project was made in vanilla HTML, JavaScript and CSS, so only local server setup is needed.
 
 ```bash
-cd frontend
+cd docs
 python -m http.server
 ```
