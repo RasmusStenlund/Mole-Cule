@@ -14,6 +14,7 @@ app = FastAPI(title="Mole-Cule API", description = "This is the API used for the
 
 origins = [
     "https://rasmusstenlund.github.io",
+    "https://molecule.dino.icu"
 ]
 
 app.add_middleware(
