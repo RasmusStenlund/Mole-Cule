@@ -16,6 +16,8 @@ body {
     font-size: clamp(20px, 3vw, 30px);
     min-height: 60px;
     padding-right: 15px;
+    position: sticky;
+    top: 0;
 }
 
 .logo {
@@ -263,7 +265,7 @@ input[type = "text"] {
 
 /* Home */
 
-.home {
+#home {
     width: 95vw;;
     background-color: rgb(31, 31, 34);
     display: flex;
@@ -276,7 +278,7 @@ input[type = "text"] {
     gap: 40px;
 }
 
-.home .features {
+#home .features {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -284,13 +286,13 @@ input[type = "text"] {
     padding-bottom: 30px;
 }
 
-.home .features .list {
+#home .features .list {
     display: flex;
     flex-direction: column;
     row-gap: 10px;
 }
 
-.home .info {
+#home .info {
     display: flex;
 }
 
@@ -303,14 +305,14 @@ input[type = "text"] {
 
 /* Analyze */
 
-.analyze {
+#analyze {
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;
     flex-wrap: wrap;
 }
 
-.analyze .enter {
+#analyze .enter {
     background-color: rgb(31, 31, 34);;
     display:flex;
     flex-direction: column;
@@ -322,11 +324,11 @@ input[type = "text"] {
     gap: 20px;
 }
 
-.analyze .enter form {
+#analyze .enter form {
     width: 100%;
 }
 
-.analyze .enter .write {
+#analyze .enter .write {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -336,7 +338,7 @@ input[type = "text"] {
     
 }
 
-.analyze .enter .write input {
+#analyze .enter .write input {
     height: clamp(45px, 10vh, 75px);
     width: 90%;
     margin-top: 5px;
@@ -352,7 +354,7 @@ input[type = "text"] {
     
 }
 
-.analyze .enter .buttons {
+#analyze .enter .buttons {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -364,7 +366,7 @@ input[type = "text"] {
     
 }
 
-.analyze .data{
+#analyze .data{
     width: clamp(450px, 60vw, 60vw);
     background-color: rgb(31, 31, 34);
     display: flex;
@@ -376,12 +378,12 @@ input[type = "text"] {
     border-radius: 10px;
 }
 
-.analyze .data > div {
+#analyze .data > div {
     width: clamp(270px, 87%, 87%);
     align-items: center;
 }
 
-.analyze .data .formula {
+#analyze .data .formula {
     display: flex;
     font-size: 1.1rem;
     font-weight: bold;
@@ -391,12 +393,12 @@ input[type = "text"] {
     background-color: #2c2c31;
 }
 
-.analyze .data .formula .molar_mass {
+#analyze .data .formula .molar_mass {
     font-size: 1rem;
     font-weight: normal; 
 }
 
-.analyze .data .desktop {
+#analyze .data .desktop {
     display: grid;
     grid-template-columns:repeat(5, 1fr);
     text-align: center;
@@ -411,7 +413,7 @@ input[type = "text"] {
     row-gap: 10px;
 }
 
-.analyze .data .element-card {
+#analyze .data .element-card {
     display: grid;
     font-weight: bold;
     font-size: 1.1rem;
@@ -423,41 +425,41 @@ input[type = "text"] {
     background-color: #2c2c31;
 }
 
-.analyze .data .mobile {
+#analyze .data .mobile {
     display: none;
 }
 
 @media screen and (max-width: 700px) {
-    .analyze {
+    #analyze {
         gap: 20px;
     }
 
-    .analyze .enter {
+    #analyze .enter {
         width: clamp(300px, 90vw, 90vw);
     }
 
-    .analyze .data {
+    #analyze .data {
         width: clamp(300px, 90vw, 90vw);
     }
 
-    .analyze .data .mobile {
+    #analyze .data .mobile {
         display: revert;
         font-weight: normal;
         font-size: 1rem;
     }
 
-    .analyze .data .element-card {
+    #analyze .data .element-card {
         display: Grid;
         grid-template-columns: 1fr auto;
         text-align: left;
         row-gap: 5px;
     }
 
-    .analyze .data .desktop {
+    #analyze .data .desktop {
         display: none;
     }
 
-    .analyze .error {
+    #analyze .error {
         width: clamp(300px, 90vw, 90vw);
     }
 }
@@ -465,14 +467,14 @@ input[type = "text"] {
 
 /* Convert */
 
-.convert {
+#convert {
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;
     flex-wrap: wrap;
 }
 
-.convert .enter {
+#convert .enter {
     background-color: rgb(31, 31, 34);;
     border-radius: 10px;
     width: clamp(200px, 40vw, 40vw);
@@ -501,11 +503,11 @@ input[type = "text"] {
     
 }
 
-.convert .enter .unit input[type = "radio"] {
+#convert .enter .unit input[type = "radio"] {
     display: none;
 }
 
-.convert .enter .unit {
+#convert .enter .unit {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -513,7 +515,7 @@ input[type = "text"] {
     gap: 20px;
 }
 
-.convert .enter .unit .toggle-unit {
+#convert .enter .unit .toggle-unit {
     position: relative;
     background-color: #33333d;
     height: 40px;
@@ -524,12 +526,12 @@ input[type = "text"] {
     border-radius: 10px;
 }
 
-.convert .enter .unit .toggle-unit label {
+#convert .enter .unit .toggle-unit label {
     flex: 1;
     text-align: center;
 }
 
-.convert .enter .unit .toggle-unit .slider {
+#convert .enter .unit .toggle-unit .slider {
     position: absolute;
     width: 45%;
     height: 30px;
@@ -539,15 +541,15 @@ input[type = "text"] {
     border-radius: 10px;
 }
 
-.convert .enter .unit .toggle-unit label {
+#convert .enter .unit .toggle-unit label {
     z-index: 1;
 }
 
-.convert .enter .unit .toggle-unit label:hover {
+#convert .enter .unit .toggle-unit label:hover {
     cursor: pointer;
 }
 
-.convert .enter .unit .toggle-unit #convert-radio-mol:checked ~ .slider {
+#convert .enter .unit .toggle-unit #convert-radio-mol:checked ~ .slider {
     transform: translateX(-111%);
 }
 
@@ -561,7 +563,7 @@ input[type = "text"] {
     width: clamp(100px, 11vw, 11vw);
 }
 
-.convert .enter .buttons {
+#convert .enter .buttons {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -573,7 +575,7 @@ input[type = "text"] {
     
 }
 
-.convert .data {
+#convert .data {
     background-color: rgb(31, 31, 34);
     width: clamp(200px, 30vw, 30vw);
     display: flex;
@@ -586,7 +588,7 @@ input[type = "text"] {
 
 }
 
-.convert .data .formula {
+#convert .data .formula {
     display: flex;
     background-color: #2c2c31;
     border-radius: 0.8vw;
@@ -598,7 +600,7 @@ input[type = "text"] {
     font-size: 1.1rem;
 }
 
-.convert .data .count-data {
+#convert .data .count-data {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -606,7 +608,7 @@ input[type = "text"] {
     flex-wrap: wrap;
 }
 
-.convert .data .count-data div {
+#convert .data .count-data div {
     display:flex;
     flex-direction:column;
     flex: 1;
@@ -619,22 +621,30 @@ input[type = "text"] {
 }
 
 @media screen and (max-width: 585px) {
-    .convert:has(.error:not(.hidden)) .enter {
+    #convert:has(.error:not(.hidden)) {
+        gap: 20px;
+    }
+
+    #convert:has(.error:not(.hidden)) .enter {
         width: clamp(300px, 90vw, 90vw)
     }
-    .convert:has(.error:not(.hidden)) .error {
-        margin-top: 20px;
+
+    #convert:has(.error:not(.hidden)) .error {
         width: clamp(300px, 90vw, 90vw)
     }
     
 }
 
 @media screen and (max-width: 460px) {
-    .convert .enter {
+    #convert {
+        gap: 20px;
+    }
+
+    #convert .enter {
         width: clamp(200px, 90vw, 90vw)
     }
 
-    .convert .data {
+    #convert .data {
         margin-top: 20px;
         width: clamp(200px, 90vw, 90vw)
     }
@@ -642,14 +652,14 @@ input[type = "text"] {
 
 /* Balance */
 
-.balance {
+#balance {
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;
     flex-wrap: wrap;
 }
 
-.balance .enter {
+#balance .enter {
     background-color: #1f1f22;
     border-radius: 10px;
     width: clamp(200px, 50vw, 50vw);
@@ -659,9 +669,10 @@ input[type = "text"] {
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    box-sizing: border-box;
 }
 
-.balance .enter .buttons {
+#balance .enter .buttons {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -672,7 +683,7 @@ input[type = "text"] {
     margin-top: 20px;
 }
 
-.balance .data {
+#balance .data {
     background-color: #1f1f22;
     width: clamp(400px, 45vw, 45vw);
     height: 230px;
@@ -682,9 +693,10 @@ input[type = "text"] {
     align-items: center;
     gap: 10px;
     border-radius: 10px;
+    box-sizing: border-box;
 }
 
-.balance .data .balanced, .balance .data .entered {
+#balance .data .balanced, #balance .data .entered {
     background-color: #2c2c31;
     margin: 0px;
     height: 35%;
@@ -698,33 +710,37 @@ input[type = "text"] {
 
 }
 
-.balance .data .balanced p, .balance .data .entered p {
+#balance .data .balanced p, #balance .data .entered p {
     margin: 0px;
 }
 
-@media screen and (max-width: 700px) {
-    .balance {
+@media screen and (max-width: 825px) {
+    #balance {
         gap: 20px;
     }
 
-    .balance .enter {
-        width: 95vw;
+    #balance .enter {
+        width: 90vw;
     }
 
-    .balance .data {
-        width: 95vw;
+    #balance .data {
+        width: 90vw;
+    }
+
+    #balance .error {
+        width: clamp(300px, 90vw, 90vw)
     }
 }
 
 /* Empirical */
 
-.empirical {
+#empirical {
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;
 }
 
-.empirical .enter {
+#empirical .enter {
     background-color: #1f1f22;
     width: clamp(200px, 50vw, 50vw);
     display: flex;
@@ -736,7 +752,7 @@ input[type = "text"] {
     border-radius: 10px;
 }
 
-.empirical .composition-maker {
+#empirical .composition-maker {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -753,7 +769,7 @@ input[type = "text"] {
     max-width: 600px;
 }
 
-.empirical .empirical-part {
+#empirical .empirical-part {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -761,24 +777,24 @@ input[type = "text"] {
     flex-shrink: 0;
 }
 
-.empirical .enter .empirical-part {
+#empirical .enter .empirical-part {
     opacity: 0;
     transition: 0.25s;
     transform: translateY(-7px);
 }
 
-.empirical .enter .empirical-part.show {
+#empirical .enter .empirical-part.show {
     opacity: 1;
     transform: translateY(0)
 }
 
-.empirical .empirical-part input {
+#empirical .empirical-part input {
     height: 35px;
     width: 80px;
 
 }
 
-.empirical .empirical-optional {
+#empirical .empirical-optional {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -786,7 +802,7 @@ input[type = "text"] {
     gap: 20px;
 }
 
-.empirical .hydrate-container {
+#empirical .hydrate-container {
     display: flex;
     align-items:center;
     width: 130px;;
@@ -801,7 +817,7 @@ input[type = "text"] {
     width: 0;
 }
 
-.empirical .hydrate-container .checkmark {
+#empirical .hydrate-container .checkmark {
     display: inline-block;
     height: 20px;
     width: 20px;
@@ -811,15 +827,15 @@ input[type = "text"] {
     transition: 0.2s;
 }
 
-.empirical .hydrate-container:hover #empirical-hydrate-check ~ .checkmark {
+#empirical .hydrate-container:hover #empirical-hydrate-check ~ .checkmark {
     background-color: #38383e;
 }
 
-.empirical .hydrate-container #empirical-hydrate-check:checked ~ .checkmark {
+#empirical .hydrate-container #empirical-hydrate-check:checked ~ .checkmark {
     background-color: #646486;
 }
 
-.empirical .hydrate-container .checkmark::after {
+#empirical .hydrate-container .checkmark::after {
     content: "";
     position: absolute; 
     left: 7px;
@@ -850,12 +866,12 @@ input[type = "text"] {
 
 }
 
-.empirical .optional-hydrate:has(#empirical-hydrate-check:checked) .optional-hydrate-data {
+#empirical .optional-hydrate:has(#empirical-hydrate-check:checked) .optional-hydrate-data {
     max-height: 200px;
     opacity: 1;
 }
 
-.empirical .optional-molar-mass {
+#empirical .optional-molar-mass {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -863,11 +879,11 @@ input[type = "text"] {
     gap: 20px;
 }
 
-.empirical .empirical-optional input {
+#empirical .empirical-optional input {
     height: 35px;
 }
 
-.empirical .optional-hydrate {
+#empirical .optional-hydrate {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -879,7 +895,7 @@ input[type = "text"] {
     width: 100%
 }
 
-.empirical .hydrate-mass, .empirical .anhydrous-mass {
+#empirical .hydrate-mass, #empirical .anhydrous-mass {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -887,7 +903,7 @@ input[type = "text"] {
     gap: 20px;
 }
 
-.empirical .enter .buttons {
+#empirical .enter .buttons {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -898,7 +914,7 @@ input[type = "text"] {
     margin-top: 20px;
 }
 
-.empirical .data {
+#empirical .data {
     width: clamp(200px, 40vw, 40vw);
     background-color: #1f1f22;
     border-radius: 10px;
@@ -910,7 +926,7 @@ input[type = "text"] {
     gap: 20px;
 }
 
-.empirical .data .empirical-part, .empirical .data .molecular-part, #empirical-warning {
+#empirical .data .empirical-part, #empirical .data .molecular-part, #empirical-warning {
     background-color: #2c2c31;
     width: 90%;
     display: flex;
@@ -922,35 +938,39 @@ input[type = "text"] {
     gap: 10px;
 }
 
-.empirical .data .empirical-data, .empirical .data .molecular-data {
+#empirical .data .empirical-data, #empirical .data .molecular-data {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
 }
 
-.empirical .data p {
+#empirical .data p {
     margin: 0px;
 }
 
 @media screen and (max-width: 420px) {
-    .empirical {
+    #empirical {
         flex-direction: column;
         align-items: center;
         gap: 20px;
     }
 
-    .empirical .enter {
+    #empirical .enter {
         width: 90vw;
     }
 
-    .empirical .data {
+    #empirical .data {
         width: 90vw;
+    }
+
+    #empirical .error {
+        width: clamp(300px, 90vw, 90vw)
     }
 }
 
 /* Limiting */
 
-.limiting {
+#limiting {
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;
@@ -958,7 +978,7 @@ input[type = "text"] {
     
 }
 
-.limiting .enter {
+#limiting .enter {
     background-color: #1f1f22;
     width: clamp(220px, 45vw, 45vw);
     padding-top: 10px;
@@ -971,7 +991,7 @@ input[type = "text"] {
 
 }
 
-.limiting .enter .reactants-mol-list {
+#limiting .enter .reactants-mol-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(210px, max-content));
     justify-content: center;
@@ -980,25 +1000,25 @@ input[type = "text"] {
     row-gap: 10px;
 }
 
-.limiting .enter .reactant-mol {
+#limiting .enter .reactant-mol {
     display: flex;
     align-items: center;
     gap: 8px;
     white-space: nowrap;
 }
 
-.limiting .enter .reactant-mol .reactant {
+#limiting .enter .reactant-mol .reactant {
     width: 90px;
     text-align: end;
 }
 
-.limiting .enter .reactant-mol input {
+#limiting .enter .reactant-mol input {
     height: 35px;
     width: 80px;
     margin-right: 10px;
 }
 
-.limiting .enter .buttons {
+#limiting .enter .buttons {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -1009,9 +1029,9 @@ input[type = "text"] {
     margin-top: 20px;
 }
 
-.limiting .data {
+#limiting .data {
     background-color: #1f1f22;
-    width: clamp(200px, 45vw, 45vw);
+    width: clamp(350px, 45vw, 45vw);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -1021,7 +1041,7 @@ input[type = "text"] {
     padding-bottom: 20px;
 }
 
-.limiting .data > div {
+#limiting .data > div {
     width: 90%;
     background-color: #2c2c31;
     display: flex;
@@ -1033,7 +1053,7 @@ input[type = "text"] {
     gap: 10px;
 }
 
-.limiting .theo-yields-list, .limiting .excess-remnants-list {
+#limiting .theo-yields-list, #limiting .excess-remnants-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(210px, max-content));
     width: 100%;
@@ -1042,34 +1062,38 @@ input[type = "text"] {
     row-gap: 5px;
 }
 
-.limiting .data .theo-yield, .limiting .data .excess-remnant {
+#limiting .data .theo-yield, #limiting .data .excess-remnant {
     display: flex;
     gap: 8px;
     white-space: nowrap;
     align-items: center;
 }
 
-.limiting .data .theo-yield .product, .limiting .data .excess-remnant .reactant {
+#limiting .data .theo-yield .product, #limiting .data .excess-remnant .reactant {
     width: 90px;
     text-align: end;
 }
 
-.limiting .data .theo-yield .count, .limiting .data .excess-remnant .count {
+#limiting .data .theo-yield .count, #limiting .data .excess-remnant .count {
     width: 90px;
     text-align: start;
 }
 
 
-@media screen and (max-width: 440px) {
-    .limiting {
+@media screen and (max-width: 660px) {
+    #limiting {
         gap: 20px;
     }
 
-    .limiting .enter {
+    #limiting .enter {
         width: clamp(220px, 90vw, 90vw);
     }
 
-    .limiting .data {
+    #limiting .data {
         width: clamp(200px, 90vw, 90vw);
+    }
+
+    #limiting .error {
+        width: clamp(300px, 90vw, 90vw);
     }
 }

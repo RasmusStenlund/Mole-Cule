@@ -1,6 +1,6 @@
 export function page() {
     return `
-        <div class = "convert">
+        <div id = "convert">
             <div class = "enter">
                 <p>Formula</p>
                 <input type = "text" id = "convert-formula" name = "formula" placeholder = "e.g H2O" required>

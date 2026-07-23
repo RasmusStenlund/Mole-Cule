@@ -1,6 +1,6 @@
 export function page() {
     return `
-    <div class = "home">
+    <div id = "home">
         <h1>Welcome to Mole-Cule</h1>
         
         <div class = "features">

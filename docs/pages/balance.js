@@ -1,6 +1,6 @@
 export function page() {
     return `
-        <div class = "balance">
+        <div id = "balance">
             <div class = "enter">
                 <div class = "equation-maker">
                     <p>Reactants</p>

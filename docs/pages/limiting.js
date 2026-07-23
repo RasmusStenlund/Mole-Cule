@@ -1,6 +1,6 @@
 export function page() {
     return `
-        <div class = "limiting">
+        <div id = "limiting">
             <div class = "enter">
                 <p>Composition</p>
                 <div class = "equation-maker">

@@ -1,6 +1,6 @@
 export function page() {
     return `
-        <div class = "empirical">
+        <div id = "empirical">
             <div class = "enter">
                 <p>Composition</p>
                 <div class = "composition-maker">

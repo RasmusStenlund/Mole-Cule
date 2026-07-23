@@ -1,6 +1,6 @@
 export function page() {
     return `
-        <div class = "analyze">
+        <div id = "analyze">
             <div class = "enter">
             <p>Formula</p>
                 <div class = "write">
