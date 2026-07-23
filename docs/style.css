@@ -14,34 +14,56 @@ body {
     justify-content: space-between;
     background-color: #242428;
     font-size: clamp(20px, 3vw, 30px);
-    min-height: 50px;
+    min-height: 60px;
+    padding-right: 15px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+#logo-icon {
+    width: 2rem;
+    height: 2rem;
+}
+
+#logo-text {
+    color: white;
+    font-size: 1.3rem;
 }
 
 .links {
     display: flex;
-    font-size: clamp(0.5rem, 2vw, 1.5rem);
-    padding: 0;
+    margin: 0px;
+    gap: 15px;
+}
+
+.links a:not(.selected):hover {
+    background-color: #2a2a2f;
 }
 
 .links .selected, .side-menu .selected {
-    border-bottom: 2px solid #ffffff;
+    background-color: #323237;
 }
 
 .header .links a, .header .logo {
     text-align: center;
-    margin: 2vw;
+    margin: 0px;
     color: white;
     text-decoration: none;
-    padding: 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
     font-weight: 400;
     transition: 0.15s;
+    font-size: 1.1rem;
+    border-radius: 10px;
 }
 
-.header .links a:hover, .header .logo:hover {
-    font-weight: 600;
-}
-
-.icon {
+#menu-button {
     display: none;
     color: white;
     font-size: 1.1rem;
@@ -85,11 +107,17 @@ body {
     display: flex;
 }
 
+@media screen and (max-width: 775px) {
+    #logo-text {
+        display: none;
+    }
+}
+
 @media screen and (max-width: 700px) {
     .links {
         display: none;
     }
-    .icon {
+    #menu-button {
         display: block;
     }
 }
