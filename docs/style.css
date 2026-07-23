@@ -37,14 +37,14 @@ body {
 .links {
     display: flex;
     margin: 0px;
-    gap: 15px;
+    gap: 1.5rem;
 }
 
-.links a:not(.selected):hover {
+.links a:not(.selected):hover, #side-menu a:not(.selected):hover {
     background-color: #2a2a2f;
 }
 
-.links .selected, .side-menu .selected {
+.links .selected, #side-menu .selected {
     background-color: #323237;
 }
 
@@ -71,43 +71,43 @@ body {
     padding: 10px;
 }
 
-.side-menu {
+#side-menu {
     padding-top: 15px;
     padding-bottom: 15px;
     padding-left: 15px;
     padding-right: 30px;
     font-size: 1rem;
     position: fixed;
-    top: 60px;
+    top: 80px;
     right: 10px;
     display: none;
     flex-direction: column;
-    gap: 15px;
+    gap: 7px;
     z-index: 2;
-    background-color: #2e2e33;
+    background-color: #242428;
     border-radius: 10px;
 
 }
 
-.side-menu a {
+#side-menu a {
     color: white;
     text-decoration: none;
     padding: 0;
     display: block;
     width: fit-content;
     transition: 0.15s;
-    font-weight: 400;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 10px;
 }
 
-.side-menu a:hover {
-    font-weight: 600;
-}
-
-.side-menu.open {
+#side-menu.open {
     display: flex;
 }
 
-@media screen and (max-width: 775px) {
+@media screen and (max-width: 800px) {
     #logo-text {
         display: none;
     }
@@ -446,10 +446,11 @@ input[type = "text"] {
         font-size: 1rem;
     }
 
-    .analyze .data .element_card {
+    .analyze .data .element-card {
         display: Grid;
         grid-template-columns: 1fr auto;
         text-align: left;
+        row-gap: 5px;
     }
 
     .analyze .data .desktop {
@@ -473,7 +474,7 @@ input[type = "text"] {
 
 .convert .enter {
     background-color: rgb(31, 31, 34);;
-    border-radius: 0.8vw;
+    border-radius: 10px;
     width: clamp(200px, 40vw, 40vw);
     padding-bottom: 15px;
     display: flex;
@@ -581,6 +582,7 @@ input[type = "text"] {
     padding: 20px;
     border-radius: 10px;
     gap: 20px;
+    box-sizing: border-box;
 
 }
 
@@ -616,14 +618,25 @@ input[type = "text"] {
     padding-bottom: 10px;
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 585px) {
+    .convert:has(.error:not(.hidden)) .enter {
+        width: clamp(300px, 90vw, 90vw)
+    }
+    .convert:has(.error:not(.hidden)) .error {
+        margin-top: 20px;
+        width: clamp(300px, 90vw, 90vw)
+    }
+    
+}
+
+@media screen and (max-width: 460px) {
     .convert .enter {
         width: clamp(200px, 90vw, 90vw)
     }
 
     .convert .data {
         margin-top: 20px;
-        width: clamp(200px, 80vw, 90vw)
+        width: clamp(200px, 90vw, 90vw)
     }
 }
 
@@ -638,7 +651,7 @@ input[type = "text"] {
 
 .balance .enter {
     background-color: #1f1f22;
-    border-radius: 0.8vw;
+    border-radius: 10px;
     width: clamp(200px, 50vw, 50vw);
     padding-bottom: 20px;
     padding-top: 20px;
